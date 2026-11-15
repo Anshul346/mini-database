@@ -59,7 +59,7 @@ public:
         checkSchema();
     }
 
-    // ---------- getters ----------
+    // getters 
     string getName() const { return name; }
     const vector<Col>& getCols() const { return cols; }
     const vector<Row>& getRows() const { return rows; }
@@ -81,14 +81,14 @@ public:
         return -1;
     }
 
-    // ---------- insert ----------
+    // insert
     void insert(const vector<string>& values) {
         Row row(values);
         validateRow(row);
         rows.push_back(row);
     }
 
-    // ---------- select ----------
+    // select 
     vector<Row> selectAll() const { return rows; }
 
     vector<Row> select(const string& colName, const string& value) const {
@@ -99,7 +99,7 @@ public:
         return result;
     }
 
-    // ---------- update ----------
+    // update
     // Sets setCol = newValue for every row where whereCol == whereValue. Returns rows changed.
     int update(const string& whereCol, const string& whereValue,
                const string& setCol, const string& newValue) {
@@ -124,7 +124,7 @@ public:
         return hits.size();
     }
 
-    // ---------- delete ----------
+    // delete 
     // Removes every row where colName == value. Returns rows removed.
     int deleteWhere(const string& colName, const string& value) {
         size_t idx = mustFindCol(colName);
@@ -135,7 +135,7 @@ public:
         return before - rows.size();
     }
 
-    // ---------- schema changes ----------
+    // schema changes 
     // Adds a column; every existing row gets defaultValue for it
     void addColumn(const Col& col, const string& defaultValue = "") {
         if (findCol(col.getName()) != -1)
@@ -158,7 +158,6 @@ public:
         for (Row& r : rows) r.remove(idx);
     }
 
-    // ---------- file persistence (used by FileManager) ----------
     // Format:
     // TABLE|name
     // COLS|n
@@ -203,7 +202,7 @@ public:
         return t;
     }
 
-    // ---------- display ----------
+    //  display 
     // Builds an aligned text table from the given rows (all rows by default)
     string format(const vector<Row>& data) const {
         vector<size_t> widths;

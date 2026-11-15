@@ -23,7 +23,7 @@ public:
         if (this->name.empty()) throw invalid_argument("Database name cannot be empty");
     }
 
-    // ---------- getters ----------
+    // getters 
     string getName() const { return name; }
     const vector<Table>& getTables() const { return tables; }
     size_t tableCount() const { return tables.size(); }
@@ -53,7 +53,7 @@ public:
         return names;
     }
 
-    // ---------- table management ----------
+    // table management
     void createTable(const string& tableName, const vector<Col>& cols) {
         if (hasTable(tableName))
             throw invalid_argument("Table already exists: " + tableName);
@@ -76,7 +76,6 @@ public:
         tables[idx] = renamed;
     }
 
-    // ---------- file persistence (used by FileManager) ----------
     // Format:
     // DB|name
     // TABLES|n
@@ -111,7 +110,7 @@ public:
         return db;
     }
 
-    // ---------- display ----------
+    // display 
     string toString() const {
         string out = "Database " + name + " (" + to_string(tables.size()) + " table(s))\n";
         for (const Table& t : tables)

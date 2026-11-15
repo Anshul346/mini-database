@@ -15,7 +15,7 @@ private:
     vector<unique_ptr<User>> users;
     User* currentUser;   // points to an object inside users, not owned
 
-    // ---------- permission helpers ----------
+    // permission helpers 
     void requireLogin() const {
         if (!currentUser) throw runtime_error("Please log in first");
     }
@@ -39,7 +39,7 @@ private:
         return c;
     }
 
-    // ---------- startup ----------
+    // startup 
     // Loads saved data if the files exist, otherwise creates a fresh database
     // with a default admin (username: admin, password: admin123)
     void load() {
@@ -60,13 +60,13 @@ public:
         load();
     }
 
-    // ---------- saving ----------
+    //  saving
     void save() const {
         fileManager.saveDb(db);
         fileManager.saveUsers(users);
     }
 
-    // ---------- login / logout ----------
+    // login / logout
     bool login(const string& username, const string& password) {
         int idx = findUser(username);
         if (idx == -1 || !users[idx]->checkPassword(password)) return false;
@@ -82,7 +82,7 @@ public:
         return currentUser ? currentUser->describe() : "not logged in";
     }
 
-    // ---------- permission queries (used by the menu) ----------
+    //  permission queries
     bool canSelect() const      { return currentUser && currentUser->canSelect(); }
     bool canInsert() const      { return currentUser && currentUser->canInsert(); }
     bool canUpdate() const      { return currentUser && currentUser->canUpdate(); }
@@ -92,7 +92,7 @@ public:
     bool canAlterTable() const  { return currentUser && currentUser->canAlterTable(); }
     bool canManageUsers() const { return currentUser && currentUser->canManageUsers(); }
 
-    // ---------- user management ----------
+    //  user management 
     void addUser(const string& username, const string& password, const string& role) {
         require(currentUser && currentUser->canManageUsers(), "manage users");
         if (findUser(username) != -1) throw invalid_argument("User already exists: " + username);
@@ -139,7 +139,7 @@ public:
         save();
     }
 
-    // ---------- table structure ----------
+    //  table structure 
     void createTable(const string& tableName, const vector<Col>& cols) {
         require(currentUser && currentUser->canCreateTable(), "create tables");
         db.createTable(tableName, cols);
@@ -164,7 +164,7 @@ public:
         save();
     }
 
-    // ---------- data operations ----------
+    // data operations
     void insert(const string& tableName, const vector<string>& values) {
         require(currentUser && currentUser->canInsert(), "insert data");
         db.getTable(tableName).insert(values);
@@ -198,7 +198,7 @@ public:
         return n;
     }
 
-    // ---------- info ----------
+    // info 
     string showTables() const {
         require(currentUser && currentUser->canSelect(), "view tables");
         return db.toString();

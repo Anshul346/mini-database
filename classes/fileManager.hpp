@@ -51,11 +51,11 @@ public:
     FileManager(const string& dbFile = "database.db", const string& userFile = "users.db")
         : dbFile(dbFile), userFile(userFile) {}
 
-    // ---------- getters ----------
+    // getters
     string getDbFile() const { return dbFile; }
     string getUserFile() const { return userFile; }
 
-    // ---------- file checks ----------
+    // file checks 
     static bool exists(const string& path) {
         ifstream in(path);
         return in.good();
@@ -64,7 +64,7 @@ public:
     bool dbFileExists() const { return exists(dbFile); }
     bool userFileExists() const { return exists(userFile); }
 
-    // ---------- database ----------
+    // database 
     void saveDb(const Db& db) const {
         writeLines(dbFile, db.serialize());
     }
@@ -75,7 +75,7 @@ public:
         return Db::deserialize(lines, pos);
     }
 
-    // ---------- users ----------
+    //  users 
     // Format:
     // USERS|n
     //   (n lines, each as written by User::serialize)
@@ -100,7 +100,7 @@ public:
         return users;
     }
 
-    // ---------- cleanup ----------
+    // cleanup 
     void deleteFiles() const {
         remove(dbFile.c_str());
         remove(userFile.c_str());

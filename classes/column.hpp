@@ -17,7 +17,7 @@ public:
     Col(const string& name, ColType type, bool primaryKey = false, bool notNull = false)
         : name(trim(name)), type(type), primaryKey(primaryKey), notNull(notNull || primaryKey) {}
 
-    // ---------- getters ----------
+    // getters 
     string getName() const { return name; }
     ColType getType() const { return type; }
     bool isPrimaryKey() const { return primaryKey; }
@@ -25,11 +25,10 @@ public:
 
     string getTypeName() const { return typeToString(type); }
 
-    // ---------- setters ----------
+    // setters
     void setName(const string& newName) { name = trim(newName); }
 
-    // ---------- validation ----------
-    // Checks whether a value (stored as a string) is allowed in this column
+    // Checks whether a value is allowed in this column
     bool isValid(const string& value) const {
         if (value.empty()) return !notNull;
         switch (type) {
@@ -40,7 +39,6 @@ public:
         return false;
     }
 
-    // ---------- type <-> string ----------
     static string typeToString(ColType t) {
         switch (t) {
             case INT:    return "INT";
@@ -58,7 +56,6 @@ public:
         throw invalid_argument("Unknown column type: " + s);
     }
 
-    // ---------- file persistence (used by FileManager) ----------
     // Format: name|TYPE|pk|nn
     string serialize() const {
         return escape(name) + "|" + getTypeName() + "|" +
@@ -71,7 +68,7 @@ public:
         return Col(p[0], typeFromString(p[1]), p[2] == "1", p[3] == "1");
     }
 
-    // ---------- display ----------
+    // display 
     string describe() const {
         string s = name + " (" + getTypeName() + ")";
         if (primaryKey) s += " [PK]";

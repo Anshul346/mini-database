@@ -47,13 +47,12 @@ public:
     virtual bool canAlterTable() const = 0;
     virtual bool canManageUsers() const = 0;
 
-    // ---------- file persistence (used by FileManager) ----------
     // Format: ROLE|username|passwordHash
     string serialize() const {
         return escape(getRole()) + "|" + escape(username) + "|" + escape(passwordHash);
     }
 
-    // ---------- display ----------
+    // display 
     string describe() const {
         return username + " (" + getRole() + ")";
     }

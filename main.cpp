@@ -1,13 +1,10 @@
 #include "classes/databaseManager.hpp"
 using namespace std;
 
-// Thrown when the input stream ends (Ctrl+D / Ctrl+Z) so the program can exit cleanly
 struct InputEnded {};
-
-// Thrown when login fails after logout, so the program can exit
 struct LoginFailed {};
 
-// ---------- input helpers ----------
+// input helper
 string ask(const string& prompt) {
     cout << prompt;
     string s;
@@ -15,7 +12,6 @@ string ask(const string& prompt) {
     return s;
 }
 
-// Keeps asking until the user enters a whole number between lo and hi
 int askInt(const string& prompt, int lo, int hi) {
     while (true) {
         string s = trim(ask(prompt));
@@ -43,8 +39,7 @@ ColType askType() {
     return STRING;
 }
 
-// ---------- login ----------
-// Up to 3 attempts. Returns false if all fail
+// login
 bool loginScreen(DbManager& mgr) {
     for (int attempt = 1; attempt <= 3; attempt++) {
         string user = ask("Username: ");
@@ -58,7 +53,7 @@ bool loginScreen(DbManager& mgr) {
     return false;
 }
 
-// ---------- actions: tables ----------
+// table action
 void showTables(DbManager& mgr) {
     cout << "\n" << mgr.showTables();
 }
@@ -116,7 +111,7 @@ void dropColumn(DbManager& mgr) {
     cout << "Column dropped.\n";
 }
 
-// ---------- actions: data ----------
+// data action
 void insertRow(DbManager& mgr) {
     string table = ask("Table name: ");
     vector<Col> cols = mgr.getColumns(table);
@@ -164,7 +159,7 @@ void deleteRows(DbManager& mgr) {
     cout << n << " row(s) deleted.\n";
 }
 
-// ---------- actions: account ----------
+// account action
 void changePassword(DbManager& mgr) {
     string oldPw = ask("Current password: ");
     string newPw = ask("New password: ");
@@ -185,7 +180,7 @@ void showPermissions(DbManager& mgr) {
          << "  Manage users ......... " << yn(mgr.canManageUsers()) << "\n";
 }
 
-// ---------- user management (admin only) ----------
+// user management (admin only) 
 void userMenu(DbManager& mgr) {
     while (true) {
         cout << "\n--- User Management ---\n"
@@ -232,7 +227,7 @@ void userMenu(DbManager& mgr) {
     }
 }
 
-// ---------- role-based main menu ----------
+// main menu
 struct MenuItem {
     string section;
     string label;
@@ -271,8 +266,9 @@ int main() {
     try {
         DbManager mgr("mydb", "database.db", "users.db");
 
-        cout << "=== Mini Database ===\n";
-        cout << "First run? Log in with admin / admin123 and change the password.\n\n";
+        cout << "=====================================" << endl;
+        cout << "   MINI DATABASE MANAGEMENT SYSTEM   " << endl;
+        cout << "=====================================" << endl;
 
         if (!loginScreen(mgr)) {
             cout << "Login failed. Exiting.\n";
@@ -280,13 +276,12 @@ int main() {
         }
 
         while (true) {
-            // Rebuild the menu every time, so it always matches the current user
+            // Rebuilding the menu every time, so it always matches the current user
             vector<MenuItem> visible;
             for (MenuItem& item : buildMenu(mgr))
                 if (item.allowed) visible.push_back(item);
 
-            cout << "\n===== MINI DATABASE =====\n"
-                 << "Logged in as: " << mgr.whoAmI() << "\n";
+            cout << "\nLogged in as: " << mgr.whoAmI() << endl;
             string lastSection;
             for (size_t i = 0; i < visible.size(); i++) {
                 if (visible[i].section != lastSection) {
@@ -312,7 +307,7 @@ int main() {
         }
 
         mgr.save();
-        cout << "Goodbye.\n";
+        cout << "\nGoodbye.\n";
     } catch (const LoginFailed&) {
         cout << "Login failed. Exiting.\n";
         return 1;

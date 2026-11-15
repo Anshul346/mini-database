@@ -1,2 +1,13 @@
 DB|mydb
-TABLES|0
+TABLES|1
+TABLE|students
+COLS|4
+roll|INT|1|1
+first name|STRING|0|1
+last name|STRING|0|0
+marks|DOUBLE|0|0
+ROWS|4
+2|Divyanshu|Jindoliya|99.99
+31|Tushar|Biswas|90
+34|Mayank|Rawat|90.00
+35|Anshul||90
