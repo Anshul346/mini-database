@@ -1,11 +1,11 @@
 #pragma once
-#include "helper.hpp"
-#include "classes/column.hpp"
-#include "classes/row.hpp"
-#include "classes/table.hpp"
-#include "classes/database.hpp"
-#include "classes/user.hpp"
-#include "classes/fileManager.hpp"
+#include "../helper.hpp"
+#include "column.hpp"
+#include "row.hpp"
+#include "table.hpp"
+#include "database.hpp"
+#include "user.hpp"
+#include "fileManager.hpp"
 using namespace std;
 
 class DbManager {
@@ -81,6 +81,16 @@ public:
     string whoAmI() const {
         return currentUser ? currentUser->describe() : "not logged in";
     }
+
+    // ---------- permission queries (used by the menu) ----------
+    bool canSelect() const      { return currentUser && currentUser->canSelect(); }
+    bool canInsert() const      { return currentUser && currentUser->canInsert(); }
+    bool canUpdate() const      { return currentUser && currentUser->canUpdate(); }
+    bool canDelete() const      { return currentUser && currentUser->canDelete(); }
+    bool canCreateTable() const { return currentUser && currentUser->canCreateTable(); }
+    bool canDropTable() const   { return currentUser && currentUser->canDropTable(); }
+    bool canAlterTable() const  { return currentUser && currentUser->canAlterTable(); }
+    bool canManageUsers() const { return currentUser && currentUser->canManageUsers(); }
 
     // ---------- user management ----------
     void addUser(const string& username, const string& password, const string& role) {
@@ -197,5 +207,10 @@ public:
     string describeTable(const string& tableName) const {
         require(currentUser && currentUser->canSelect(), "view tables");
         return db.getTable(tableName).describe();
+    }
+
+    vector<Col> getColumns(const string& tableName) const {
+        require(currentUser && currentUser->canSelect(), "view tables");
+        return db.getTable(tableName).getCols();
     }
 };
