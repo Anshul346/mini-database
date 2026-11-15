@@ -1,6 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+string repeat(const string& s, int n) {
+    string out;
+    for (int i = 0; i < n; i++) out += s;
+    return out;
+}
+
 string trim(const string& s) {
     int st=0,end=s.size()-1;
     while(st<=end && s[st]==' ') st++;
